@@ -31,6 +31,7 @@
   copy:
     src: "/tmp/guacamole-auth-quickconnect-{{ guacamole_version }}/guacamole-auth-quickconnect-{{ guacamole_version }}.jar"
     dest: "/etc/guacamole/extensions/guacamole-auth-quickconnect-{{ guacamole_version }}.jar"
+    remote_src: yes
     owner: root
     group: root
     mode: '0644'
