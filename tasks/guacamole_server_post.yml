@@ -16,8 +16,8 @@
 
 - name: Copy guacamole.properties file
   become: true
-  copy:
-    src: guacamole.properties
+  template:
+    src: guacamole.properties.j2
     dest: /etc/guacamole/guacamole.properties
 
 - name: link guacamole
@@ -33,6 +33,16 @@
     owner: tomcat
     group: tomcat
     recurse: yes
+
+- name: Ensure extensions directory has proper permissions
+  when: ar_guacamole_quickconnect_enabled | bool
+  become: true
+  ansible.builtin.file:
+    path: /etc/guacamole/extensions
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
 
 - name: Copy user-mapping.xml
   template:

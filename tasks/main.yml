@@ -3,4 +3,5 @@
 - include_tasks: setup_tomcat.yml
 - include_tasks: guacamole_server.yml
 - include_tasks: guacamole_client.yml
+- include_tasks: guacamole_quickconnect.yml
 - include_tasks: guacamole_server_post.yml

@@ -1,0 +1,36 @@
+---
+
+- name: Set Guacamole version
+  set_fact:
+    guacamole_version: "1.6.0"
+
+- name: Download Quickconnect extension
+  when: ar_guacamole_quickconnect_enabled | bool
+  get_url:
+    url: "https://downloads.apache.org/guacamole/{{ guacamole_version }}/binary/guacamole-auth-quickconnect-{{ guacamole_version }}.tar.gz"
+    dest: "/tmp/guacamole-auth-quickconnect-{{ guacamole_version }}.tar.gz"
+
+- name: Extract Quickconnect extension
+  when: ar_guacamole_quickconnect_enabled | bool
+  unarchive:
+    src: "/tmp/guacamole-auth-quickconnect-{{ guacamole_version }}.tar.gz"
+    dest: "/tmp/"
+    remote_src: yes
+
+- name: Ensure extensions directory exists
+  when: ar_guacamole_quickconnect_enabled | bool
+  become: true
+  file:
+    path: /etc/guacamole/extensions
+    state: directory
+    mode: '0755'
+
+- name: Copy Quickconnect extension JAR
+  when: ar_guacamole_quickconnect_enabled | bool
+  become: true
+  copy:
+    src: "/tmp/guacamole-auth-quickconnect-{{ guacamole_version }}/guacamole-auth-quickconnect-{{ guacamole_version }}.jar"
+    dest: "/etc/guacamole/extensions/guacamole-auth-quickconnect-{{ guacamole_version }}.jar"
+    owner: root
+    group: root
+    mode: '0644'
