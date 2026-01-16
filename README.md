@@ -1,4 +1,4 @@
-# Ansible Role: ([Ludus](https://ludus.cloud)) Attack Range Guacamole
+# Ansible Role: Attack Range Guacamole
 
 This will configure Apache Guacamole server and client in [Attack Range](https://github.com/splunk/attack_range). Guacamole provides a web-based remote desktop gateway that supports SSH, RDP, and VNC connections.
 
