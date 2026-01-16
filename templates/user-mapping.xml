@@ -10,7 +10,7 @@
             <param name="port">{{ server.port }}</param>
             <param name="username">{{ server.username }}</param>
 {% if server.protocol == 'ssh' %}
-            <param name="private-key">{{ server.private_key }}</param>
+            <param name="password">{{ server.password }}</param>
 {% elif server.protocol == 'rdp' %}
             <param name="password">{{ server.password }}</param>
             <param name="ignore-cert">true</param>
