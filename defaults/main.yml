@@ -1,0 +1,17 @@
+---
+
+ar_guacamole_password: Pl3ase-k1Ll-me:p
+
+ar_guacamole_servers:
+- name: linux_server
+  protocol: ssh
+  hostname: 10.0.1.1
+  port: 22
+  username: ubuntu
+  private_key: ~/.ssh/id_rsa
+- name: windows_server
+  protocol: rdp
+  hostname: 10.0.1.2
+  port: 3389
+  username: Administrator
+  password: password

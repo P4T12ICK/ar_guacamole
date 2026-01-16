@@ -1,0 +1,21 @@
+<user-mapping>
+    <authorize 
+            username="admin"
+            password="{{ar_guacamole_password|hash('md5')}}"
+            encoding="md5">     
+{% for server in ar_guacamole_servers %}
+        <connection name="{{ server.name }}">
+            <protocol>{{ server.protocol }}</protocol>
+            <param name="hostname">{{ server.hostname }}</param>
+            <param name="port">{{ server.port }}</param>
+            <param name="username">{{ server.username }}</param>
+{% if server.protocol == 'ssh' %}
+            <param name="private-key">{{ lookup('file', server.private_key) }}</param>
+{% elif server.protocol == 'rdp' %}
+            <param name="password">{{ server.password }}</param>
+            <param name="ignore-cert">true</param>
+{% endif %}
+        </connection>
+{% endfor %}
+    </authorize>
+</user-mapping>

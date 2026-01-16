@@ -1,0 +1,53 @@
+---
+
+- name: Set GUACAMOLE_HOME in /etc/default/tomcat
+  ansible.builtin.lineinfile:
+    path: /etc/default/tomcat
+    line: 'GUACAMOLE_HOME=/etc/guacamole'
+    create: yes
+    state: present
+
+- name: Set GUACAMOLE_HOME in /etc/profile
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    line: 'export GUACAMOLE_HOME=/etc/guacamole'
+    create: yes
+    state: present
+
+- name: Copy guacamole.properties file
+  become: true
+  copy:
+    src: guacamole.properties
+    dest: /etc/guacamole/guacamole.properties
+
+- name: link guacamole
+  ansible.builtin.file:
+    src: /etc/guacamole
+    dest: /opt/tomcat/tomcatapp/.guacamole
+    state: link
+    force: no
+
+- name: Give permission
+  ansible.builtin.file:
+    path: /opt/tomcat
+    owner: tomcat
+    group: tomcat
+    recurse: yes
+
+- name: Copy user-mapping.xml
+  template:
+    src: user-mapping.xml
+    dest: /etc/guacamole/user-mapping.xml
+
+- name: Create a new folder
+  file:
+    path: /home/ubuntu/shared-folder
+    state: directory
+
+- name: Restart guacd and tomcat
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - tomcat
+    - guacd

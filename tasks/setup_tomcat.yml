@@ -1,0 +1,73 @@
+---
+
+- name: Create Tomcat system user
+  ansible.builtin.user:
+    name: tomcat
+    home: /opt/tomcat
+    shell: /bin/false
+    create_home: yes
+    state: present
+
+- name: Create Tomcat directory
+  ansible.builtin.file:
+    path: /opt/tomcat
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: '0755'
+
+- name: Download Apache Tomcat
+  get_url:
+    url: https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.98/bin/apache-tomcat-9.0.98.tar.gz
+    dest: /tmp/apache-tomcat.tar.gz
+
+- name: Extract the tar file to the /opt/tomcat directory
+  ansible.builtin.unarchive:
+    src: /tmp/apache-tomcat.tar.gz
+    dest: /opt/tomcat/
+    remote_src: yes
+    creates: /opt/tomcat/apache-tomcat-9.0.98
+
+- name: Move extracted Tomcat to tomcatapp
+  ansible.builtin.command:
+    cmd: mv /opt/tomcat/apache-tomcat-9.0.98 /opt/tomcat/tomcatapp
+  args:
+    creates: /opt/tomcat/tomcatapp
+
+- name: Give necessary permissions
+  ansible.builtin.file:
+    path: /opt/tomcat
+    state: directory
+    recurse: yes
+    owner: tomcat
+    group: tomcat
+
+- name: Make Tomcat scripts executable
+  ansible.builtin.file:
+    path: /opt/tomcat/tomcatapp/bin/
+    recurse: yes
+    mode: '0755'
+    state: directory
+
+- name: Copy tomcat.service file
+  become: true
+  copy:
+    src: tomcat.service
+    dest: /etc/systemd/system/tomcat.service
+
+- name: System daemon reload
+  become: true
+  systemd:
+    daemon_reload: yes
+
+- name: Enable tomcat
+  become: true
+  systemd:
+    name: tomcat.service
+    enabled: yes
+
+- name: Restart tomcat
+  become: true
+  systemd:
+    name: tomcat.service
+    state: restarted
