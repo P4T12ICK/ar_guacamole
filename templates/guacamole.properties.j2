@@ -2,11 +2,3 @@ guacd-hostname: localhost
 guacd-port:    4822
 user-mapping:    /etc/guacamole/user-mapping.xml
 auth-provider:    net.sourceforge.guacamole.net.basic.BasicFileAuthenticationProvider
-{% if ar_guacamole_quickconnect_enabled | bool %}
-{% if ar_guacamole_quickconnect_allowed_parameters | length > 0 %}
-quickconnect-allowed-parameters: {{ ar_guacamole_quickconnect_allowed_parameters }}
-{% endif %}
-{% if ar_guacamole_quickconnect_denied_parameters | length > 0 %}
-quickconnect-denied-parameters: {{ ar_guacamole_quickconnect_denied_parameters }}
-{% endif %}
-{% endif %}

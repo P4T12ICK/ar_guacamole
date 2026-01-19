@@ -34,16 +34,6 @@
     group: tomcat
     recurse: yes
 
-- name: Ensure extensions directory has proper permissions
-  when: ar_guacamole_quickconnect_enabled | bool
-  become: true
-  ansible.builtin.file:
-    path: /etc/guacamole/extensions
-    owner: root
-    group: root
-    mode: '0755'
-    state: directory
-
 - name: Copy user-mapping.xml
   template:
     src: user-mapping.xml
