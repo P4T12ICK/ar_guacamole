@@ -8,12 +8,16 @@
             <protocol>{{ server.protocol }}</protocol>
             <param name="hostname">{{ server.hostname }}</param>
             <param name="port">{{ server.port }}</param>
+{% if server.protocol != 'vnc' %}
             <param name="username">{{ server.username }}</param>
+{% endif %}
 {% if server.protocol == 'ssh' %}
             <param name="password">{{ server.password }}</param>
 {% elif server.protocol == 'rdp' %}
             <param name="password">{{ server.password }}</param>
             <param name="ignore-cert">true</param>
+{% elif server.protocol == 'vnc' %}
+            <param name="password">{{ server.password }}</param>
 {% endif %}
         </connection>
 {% endfor %}
